@@ -1,20 +1,20 @@
 <%- include("header", {title: title}) %>
 
-<h1 class="my-2"><%= title %></h1>
+<h1 class="my-2"><%- title %></h1>
 <hr />
 
 <div class="my-4 d-flex flex-column gap-3">
   <h3 class="fs-6 fw-lighter my-0">
-    <strong class="fw-bold">Category:</strong> <%= item.category.name %>
+    <strong class="fw-bold">Category:</strong> <%- item.category.name %>
   </h3>
   <h3 class="fs-6 fw-lighter my-0">
-    <strong class="fw-bold">Number in Stock:</strong> <%= item.numberInStock %>
+    <strong class="fw-bold">Number in Stock:</strong> <%- item.numberInStock %>
   </h3>
   <h3 class="fs-6 fw-lighter my-0">
-    <strong class="fw-bold">Price:</strong> <%= item.price %>
+    <strong class="fw-bold">Price:</strong> <%- item.price %>
   </h3>
 
-  <p class="my-0"><%= item.description %></p>
+  <p class="my-0"><%- item.description %></p>
 
   <hr>
 

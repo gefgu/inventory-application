@@ -1,6 +1,6 @@
 <%- include("header", {title: title}) %>
 
-<h1 class="my-2"><%= title %></h1>
+<h1 class="my-2"><%- title %></h1>
 
 <form action="" method="post" class="d-flex flex-column gap-3">
   <div class="form-group">
@@ -20,7 +20,7 @@
     <label for="category">Category:</label>
     <select name="category" id="category" class="form-control">
       <% category_list.forEach(category => { %>
-      <option <%- `value="${category._id}" ` %> <%- category._id.toString() === item?.category._id.toString() ?  "selected" : "" %>  ><%= category.name %></option>
+      <option <%- `value="${category._id}" ` %> <%- category._id.toString() === item?.category._id.toString() ?  "selected" : "" %>  ><%- category.name %></option>
       <% }) %>
     </select>
   </div>

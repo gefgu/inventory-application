@@ -1,6 +1,7 @@
 const Category = require("../models/category");
 const async = require("async");
 const { body, validationResult } = require("express-validator");
+const Item = require("../models/item");
 
 exports.category_list = (req, res, next) => {
   Category.find({}, "name")
@@ -17,6 +18,11 @@ exports.category_list = (req, res, next) => {
 exports.category_detail = (req, res, next) => {
   Category.findById(req.params.id).exec((err, category) => {
     if (err) return next(err);
+    if (category === null) {
+      const err = new Error("Genre not found");
+      err.status = 404;
+      return next(err);
+    }
     res.render("category_detail", { title: category.name, category: category });
   });
 };
@@ -61,11 +67,65 @@ exports.category_create_post = [
 ];
 
 exports.category_delete_get = (req, res, next) => {
-  res.send("Not Implemented");
+  async.parallel(
+    {
+      category: function (callback) {
+        Category.findById(req.params.id).exec(callback);
+      },
+      category_items: function (callback) {
+        Item.find({ category: req.params.id }).exec(callback);
+      },
+    },
+    function (err, results) {
+      if (err) {
+        return next(err);
+      }
+
+      if (results.category === null) {
+        const err = new Error("Category not found");
+        err.status = 404;
+        return next(err);
+      }
+
+      res.render("category_delete", {
+        title: `Delete Category: ${results.category.name}`,
+        category: results.category,
+        category_items: results.category_items,
+      });
+    }
+  );
 };
 
 exports.category_delete_post = (req, res, next) => {
-  res.send("Not Implemented");
+  async.parallel(
+    {
+      category: function (callback) {
+        Category.findById(req.params.id).exec(callback);
+      },
+      category_items: function (callback) {
+        Item.find({ category: req.params.id }).exec(callback);
+      },
+    },
+    function (err, results) {
+      if (err) {
+        return next(err);
+      }
+
+      if (results.category_items.length > 0) {
+        res.render("category_delete", {
+          title: `Delete Category: ${results.category.name}`,
+          category: results.category,
+          category_items: results.category_items,
+        });
+        return;
+      } else {
+        Category.findByIdAndRemove(req.body.categoryid, function (err) {
+          if (err) return next(err);
+          res.redirect("/categories");
+        });
+      }
+    }
+  );
 };
 
 exports.category_update_get = (req, res, next) => {

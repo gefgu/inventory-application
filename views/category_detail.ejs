@@ -7,4 +7,8 @@
   <p><%= category.description %></p>
 </div>
 
+<hr>
+
+<a href=<%- `/category/${category._id}/delete` %> >Delete Category</a>
+
 <%- include("footer") %>

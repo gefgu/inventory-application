@@ -129,9 +129,43 @@ exports.category_delete_post = (req, res, next) => {
 };
 
 exports.category_update_get = (req, res, next) => {
-  res.send("Not Implemented");
+  Category.findById(req.params.id, function (err, category) {
+    res.render("category_form", {
+      title: "Update Category",
+      category: category,
+      errors: undefined,
+    });
+  });
 };
 
-exports.category_update_post = (req, res, next) => {
-  res.send("Not Implemented");
-};
+exports.category_update_post = [
+  body("name", "Name must be specified").trim().isLength({ min: 1 }).escape(),
+  body("description", "Description must be specified")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+
+  (req, res, next) => {
+    const errors = validationResult(req);
+
+    const category = new Category({
+      name: req.body.name,
+      description: req.body.description,
+      _id: req.params.id,
+    });
+
+    if (!errors.isEmpty()) {
+      res.render("category_form", {
+        title: "Update Category",
+        category: category,
+        errors: errors.array(),
+      });
+    } else {
+      Category.findByIdAndUpdate(req.params.id, category, {}, function (err) {
+        if (err) return next(err);
+
+        res.redirect(category.url);
+      });
+    }
+  },
+];

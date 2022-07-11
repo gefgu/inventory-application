@@ -21,7 +21,17 @@ exports.item_detail = (req, res, next) => {
 };
 
 exports.item_create_get = (req, res, next) => {
-  res.send("Not Implemented");
+  Category.find({}, "name")
+    .sort({ name: 1 })
+    .exec((err, category_list) => {
+      if (err) return next(err);
+      res.render("item_form", {
+        title: "Create Item",
+        category_list: category_list,
+        item: undefined,
+        errors: undefined,
+      });
+    });
 };
 
 exports.item_create_post = (req, res, next) => {

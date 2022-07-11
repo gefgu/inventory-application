@@ -5,7 +5,7 @@ const category_controller = require("../controllers/categoryController");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  res.render("index", { title: "Express" });
+  res.render("index", { title: "Inventory Application" });
 });
 
 // Item Routes

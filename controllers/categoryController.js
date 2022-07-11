@@ -1,11 +1,15 @@
-const Category = require("../models/item");
-
-exports.index = (req, res) => {
-  res.send("Not Implemented");
-};
+const Category = require("../models/category");
 
 exports.category_list = (req, res, next) => {
-  res.send("Not Implemented");
+  Category.find({}, "name")
+    .sort({ name: 1 })
+    .exec((err, category_list) => {
+      if (err) return next(err);
+      res.render("category_list", {
+        title: "Categories",
+        category_list: category_list,
+      });
+    });
 };
 
 exports.category_detail = (req, res, next) => {

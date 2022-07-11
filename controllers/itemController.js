@@ -18,6 +18,11 @@ exports.item_detail = (req, res, next) => {
     .populate("category")
     .exec((err, item) => {
       if (err) return next(err);
+      if (item === null) {
+        const err = new Error("Item not found");
+        err.status = 404;
+        return next(err);
+      }
       res.render("item_detail", { title: item.name, item: item });
     });
 };

@@ -1,0 +1,44 @@
+<%- include("header", {title: title}) %>
+
+<h1 class="my-2"><%= title %></h1>
+
+<form action="" method="post" class="d-flex flex-column gap-3">
+  <div class="form-group">
+    <label for="name">Name:</label>
+    <input
+      class="form-control"
+      type="text"
+      id="name"
+      name="name"
+      placeholder="Name"
+      required
+      <%- category?.name && `value="${category.name}" ` %>
+    />
+    
+  </div>
+  <div class="form-group">
+    <label for="description">Description:</label>
+    <textarea
+      id="description"
+      name="description"
+      placeholder="Description"
+      cols="30"
+      rows="10"
+      class="form-control"
+      required
+    ><%- category?.description && category.description %></textarea>
+  </div>
+
+
+  <button class="btn btn-primary" type="submit">Submit</button>
+</form>
+
+<% if (errors) { %>
+
+<ul>
+  <% errors.forEach(error => { %>
+  <li><%- error.msg %></li>
+  <% }) %>
+</ul>
+
+<% } %> <%- include("footer") %>

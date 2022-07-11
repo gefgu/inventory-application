@@ -6,6 +6,9 @@
 <% if (category_list) { %> <%
 category_list.forEach(category => { %>
 <div class="my-4">
-  <h2 class="my-1"><%= category.name %></h2>
+  <a <%- `href="/category/${category._id}" ` %>
+    >
+    <h2 class="my-1"><%= category.name %></h2></a
+  >
 </div>
 <% }) %> <% } %> <%- include("footer") %>

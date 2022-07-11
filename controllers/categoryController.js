@@ -13,7 +13,11 @@ exports.category_list = (req, res, next) => {
 };
 
 exports.category_detail = (req, res, next) => {
-  res.send("Not Implemented");
+  Category.findById(req.params.id)
+    .exec((err, category) => {
+      if (err) return next(err);
+      res.render("category_detail", { title: category.name, category: category });
+    });
 };
 
 exports.category_create_get = (req, res, next) => {

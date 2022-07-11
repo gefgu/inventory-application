@@ -14,7 +14,11 @@
     <strong class="fw-bold">Price:</strong> <%= item.price %>
   </h3>
 
-  <p><%= item.description %></p>
+  <p class="my-0"><%= item.description %></p>
+
+  <hr>
+
+  <a href=<%- `/item/${item._id}/delete` %> >Delete Item</a>
 </div>
 
 <%- include("footer") %>

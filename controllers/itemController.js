@@ -95,11 +95,29 @@ exports.item_create_post = [
 ];
 
 exports.item_delete_get = (req, res, next) => {
-  res.send("Not Implemented");
+  Item.findById(req.params.id)
+    .populate("category")
+    .exec((err, item) => {
+      if (err) return next(err);
+      if (item === null) {
+        const err = new Error("Item not found");
+        err.status = 404;
+        return next(err);
+      }
+      res.render("item_delete", { title: `Delete: ${item.name}`, item: item });
+    });
 };
 
 exports.item_delete_post = (req, res, next) => {
-  res.send("Not Implemented");
+  Item.findById(req.params.id)
+    .populate("category")
+    .exec((err, item) => {
+      if (err) return next(err);
+      Item.findByIdAndRemove(req.body.itemid, (err) => {
+        if (err) return next(err);
+        res.redirect("/items");
+      });
+    });
 };
 
 exports.item_update_get = (req, res, next) => {

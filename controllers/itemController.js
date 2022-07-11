@@ -1,11 +1,14 @@
 const Item = require("../models/item");
-
-exports.index = (req, res) => {
-  res.send("Not Implemented");
-};
+const Category = require("../models/category");
 
 exports.item_list = (req, res, next) => {
-  res.send("Not Implemented");
+  Item.find({}, "name category")
+    .sort({ name: 1 })
+    .populate("category")
+    .exec((err, item_list) => {
+      if (err) return next(err);
+      res.render("item_list", { title: "Items List", item_list: item_list });
+    });
 };
 
 exports.item_detail = (req, res, next) => {

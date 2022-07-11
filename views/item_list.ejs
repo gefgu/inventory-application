@@ -1,0 +1,12 @@
+<%- include("header", {title: title}) %> 
+
+<h1><%= title %> </h1>
+<hr>
+
+<% if (item_list) { %> <%
+item_list.forEach(item => { %>
+<div class="my-4">
+  <h2 class="my-1"><%= item.name %></h2>
+  <h3 class="fs-6 fw-lighter my-0"><%= item.category.name %></h3>
+</div>
+<% }) %> <% } %> <%- include("footer") %>

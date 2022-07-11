@@ -1,9 +1,11 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
+const item_controller = require("../controllers/itemController");
+const category_controller = require("../controllers/categoryController");
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+router.get("/", function (req, res, next) {
+  res.render("index", { title: "Express" });
 });
 
 // Item Routes
@@ -18,7 +20,6 @@ router.post("/item/:id/update", item_controller.item_update_post);
 
 router.get("/item/:id", item_controller.item_detail);
 router.get("/items", item_controller.item_list);
-
 
 // Category Routes
 router.get("/category/create", category_controller.category_create_get);

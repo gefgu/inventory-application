@@ -121,9 +121,83 @@ exports.item_delete_post = (req, res, next) => {
 };
 
 exports.item_update_get = (req, res, next) => {
-  res.send("Not Implemented");
+  async.parallel(
+    {
+      category_list: function (callback) {
+        Category.find({}, "name").sort({ name: 1 }).exec(callback);
+      },
+      item: function (callback) {
+        Item.findById(req.params.id).populate("category").exec(callback);
+      },
+    },
+    function (err, results) {
+      if (err) return next(err);
+      if (results.item === null) {
+        const err = new Error("Item not found");
+        err.status = 404;
+        return next(err);
+      }
+
+      res.render("item_form", {
+        title: "Create Item",
+        category_list: results.category_list,
+        item: results.item,
+        errors: undefined,
+      });
+    }
+  );
 };
 
-exports.item_update_post = (req, res, next) => {
-  res.send("Not Implemented");
-};
+exports.item_update_post = [
+  body("name", "Name must be specified").trim().isLength({ min: 1 }).escape(),
+  body("category", "Category must be specified")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("description", "Description must be specified")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("stock", "Number in Stock must be a positive number")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .isInt({ min: 0 }),
+  body("price", "Price must be a positive number")
+    .trim()
+    .isLength({ min: 1 })
+    .isFloat({ min: 1 }),
+
+  (req, res, next) => {
+    const errors = validationResult(req);
+
+    const item = new Item({
+      name: req.body.name,
+      category: req.body.category,
+      description: req.body.description,
+      numberInStock: req.body.stock,
+      price: req.body.price,
+      _id: req.params.id,
+    });
+
+    if (!errors.isEmpty()) {
+      Category.find({}, "name")
+        .sort({ name: 1 })
+        .exec((err, category_list) => {
+          if (err) return next(err);
+          res.render("item_form", {
+            title: "Create Item",
+            category_list: category_list,
+            item: item,
+            errors: errors.array(),
+          });
+        });
+    } else {
+      Item.findByIdAndUpdate(req.params.id, item, {}, function (err) {
+        if (err) return next(err);
+
+        res.redirect(item.url);
+      });
+    }
+  },
+];

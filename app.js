@@ -7,8 +7,12 @@ const mongoose = require("mongoose");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
+const compression = require("compression");
+const helmet = require("helmet");
 
 var app = express();
+app.use(compression());
+app.use(helmet());
 
 const mongoDB =
   "mongodb+srv://gefgu:bcaZK6SvW0b2YgL6@cluster0.u6cbx.mongodb.net/inventory_application?retryWrites=true&w=majority";

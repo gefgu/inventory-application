@@ -12,7 +12,12 @@ exports.item_list = (req, res, next) => {
 };
 
 exports.item_detail = (req, res, next) => {
-  res.send("Not Implemented");
+  Item.findById(req.params.id)
+    .populate("category")
+    .exec((err, item) => {
+      if (err) return next(err);
+      res.render("item_detail", { title: item.name, item: item });
+    });
 };
 
 exports.item_create_get = (req, res, next) => {
